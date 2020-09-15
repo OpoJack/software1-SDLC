@@ -1,7 +1,7 @@
 package module2;
 
 import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.text.ParseException;
 import java.util.*;
 
@@ -29,22 +29,25 @@ public class Main {
 		
 		String myURL = "https://www.gutenberg.org/files/1065/1065-h/1065-h.htm";
 		String poem = getData(myURL);
-		String data[] = poem.split(" ");
+		String webData[] = poem.replaceAll("[^a-zA-Z ]", " ").toLowerCase().split("\\s+");
 		List<String> poemLIST = new ArrayList<String>();
-		poemLIST = Arrays.asList(data);
+		poemLIST = Arrays.asList(webData);
 		
-		//WORDS SEPERATED NOW, FIND A WAY TO TALLY UP FREQUENCY AND OUTPUT TOP 20 WORDS WITH FREQUENCIES
 		for(String s: poemLIST) {
 			System.out.println(s);
 		}
+		System.out.println(poemLIST.get(0));
 		
 		
 	}
 	
 	public static String getData(String myURL) throws IOException {
+		System.out.println("Connecting...");
 		Document doc = Jsoup.connect(myURL).get();
 		
-		String poem = doc.body().getElementsByTag("p").text();
+		//I get elements in this order because the website separates them.
+		//Spaces added where necessary
+		String poem = doc.body().getElementsByTag("h1").text() + " " + doc.body().getElementsByTag("h4").text() + " " + doc.body().getElementsByTag("h3").text()  + " " + doc.body().getElementsByTag("p").text();
 		return poem;
 		
 	}
