@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.*;
 import java.text.ParseException;
 import java.util.*;
+import java.util.stream.Stream;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.*;
@@ -30,13 +31,17 @@ public class Main {
 		String myURL = "https://www.gutenberg.org/files/1065/1065-h/1065-h.htm";
 		String poem = getData(myURL);
 		String webData[] = poem.replaceAll("[^a-zA-Z ]", " ").toLowerCase().split("\\s+");
-		List<String> poemLIST = new ArrayList<String>();
-		poemLIST = Arrays.asList(webData);
+		HashMap<String,Integer> poemHash = new HashMap<String,Integer>();
 		
-		for(String s: poemLIST) {
-			System.out.println(s);
-		}
-		System.out.println(poemLIST.get(0));
+		poemHash = wordCount(webData);
+		
+		
+		
+		
+		
+//		List<String> poemLIST = new ArrayList<String>();
+//		poemLIST = Arrays.asList(webData);
+		
 		
 		
 	}
@@ -44,6 +49,7 @@ public class Main {
 	public static String getData(String myURL) throws IOException {
 		System.out.println("Connecting...");
 		Document doc = Jsoup.connect(myURL).get();
+		System.out.println("Connected!");
 		
 		//I get elements in this order because the website separates them.
 		//Spaces added where necessary
@@ -51,6 +57,21 @@ public class Main {
 		return poem;
 		
 	}
+	
+	public static HashMap<String, Integer> wordCount(String[] strings) {
+		  HashMap<String, Integer> map = new HashMap<String, Integer> ();
+		  for (String s:strings) {
+		    
+		    if (!map.containsKey(s)) {
+		      map.put(s, 1);
+		    }
+		    else {
+		      int count = map.get(s);
+		      map.put(s, count + 1);
+		    }
+		  }
+		  return map;
+		}
 	
 	
 }
