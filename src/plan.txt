@@ -1,0 +1,25 @@
+Jack Oporto
+CEN 3024C
+FALL 2020
+Module 2 SDLC psudocode
+
+Using jsoup, load the html document
+Using jsoup, add all words from the poem to a string
+delete punctuation from the string
+place the poem into a hashmap
+sort the words in the map into descending order
+print the sorted map in order 20 times
+end
+
+I decided against a manual .txt file read in favor of the jsoup
+solution because I think it's more useful in real world scenarios where
+it can adapt to new URLs.
+
+Going into this I knew I'd have to follow these steps:
+
+Import the html doc
+extract only the poem into a string or array
+delete punctuation
+seperate words into a list of some kind
+count how many time each word appears
+print out top 20 words and frequencies
