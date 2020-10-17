@@ -78,13 +78,15 @@ public class Main extends Application{
 		
 	
 
-			Label labelFirst= new Label("Enter a url to get word frequencies from");
-			Label label= new Label();
+			Label labelFirst = new Label("Enter a url to get word frequencies from");
+			Label label = new Label();
 			        
 			//User submission and default functionality button
 			Button submitURL= new Button("Submit your url");
 			Button theRaven = new Button("Default: The Raven");
 			TextField text= new TextField();
+			
+			//User submission selection
 			submitURL.setOnAction(e -> 
 			{   
 				//Most of the data is retrieved here
@@ -93,7 +95,7 @@ public class Main extends Application{
 					primaryStage.setScene(scene2);
 					
 				} catch (InterruptedException | IOException e1) {
-					// TODO Auto-generated catch block
+					label.setText("Invalid URL");
 					e1.printStackTrace();
 				}
 				table.getColumns().addAll(indexColumn, wordColumn, freqColumn);
@@ -103,6 +105,7 @@ public class Main extends Application{
 			//Default "The Raven" selection
 			theRaven.setOnAction(e -> 
 			{   
+				//Most of the data is retrieved here
 				try {
 					table.setItems(getTableData(getAllData(myWords, null)));
 					primaryStage.setScene(scene2);
