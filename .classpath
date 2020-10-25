@@ -4,5 +4,7 @@
 	<classpathentry kind="con" path="org.eclipse.fx.ide.jdt.core.JAVAFX_CONTAINER"/>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="lib" path="C:/Users/jack-/OneDrive/Desktop/Valencia saga/FALL 2020/Software dev 1/software1-SDLC/src/jsoup-1.13.1.jar" sourcepath="C:/Users/jack-/OneDrive/Desktop/Valencia saga/FALL 2020/Software dev 1/software1-SDLC/src/jsoup-1.13.1-sources.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/5"/>
+	<classpathentry kind="lib" path="C:/Users/jack-/OneDrive/Desktop/Valencia saga/FALL 2020/Software dev 1/software1-SDLC/src/javafx-sdk-11.0.2"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

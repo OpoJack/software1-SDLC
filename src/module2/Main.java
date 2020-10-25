@@ -44,6 +44,9 @@ public class Main extends Application{
 		@SuppressWarnings("unchecked")
 		public void start(Stage primaryStage) throws Exception{
 			
+			String abc123;
+			abc123 = scrapeData("csdcsdn");
+			
 			//Scene and VBox to put everything inside of
 			VBox root = new VBox();
 			VBox root2 = new VBox();
@@ -71,12 +74,6 @@ public class Main extends Application{
 			Data myWords = new Data();
 			table = new TableView<>();
 			
-			
-			//Button and input here
-			//Button theRaven = new Button("The Raven");
-	        //theRaven.setOnAction(e -> primaryStage.setScene(scene2));
-		
-	
 
 			Label labelFirst = new Label("Enter a url to get word frequencies from");
 			Label label = new Label();
@@ -130,7 +127,6 @@ public class Main extends Application{
 			primaryStage.show();
 		}
 	
-	
 	public static Map<String, Integer> getAllData(Data myWords, String myURL) throws InterruptedException, IOException {
 		
 		//If "Default: The Raven" is selected, myURL is null and set to The Raven here
@@ -148,14 +144,15 @@ public class Main extends Application{
 		//sortedMap gets all the sorted values of poemHash
 		Map<String, Integer> sortedMap = sortByValue(poemHash);
 		
-		 
+		System.out.println(sortedMap);
 		 return sortedMap;
 	}
 		
+	
+	
 	//GETS DATA FROM WEBSITE
 	public static String scrapeData(String myURL) throws IOException, InterruptedException {
 		Document doc = Jsoup.connect(myURL).get();
-		//if(doc.)
 		
 		//I get elements in this order because the website separates them.
 		//Spaces added where necessary
