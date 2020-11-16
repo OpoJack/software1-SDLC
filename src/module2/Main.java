@@ -5,6 +5,7 @@ import java.util.*;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.*;
+import javafx.application.*;
 
 import javafx.application.Application;
 import javafx.collections.FXCollections;
@@ -35,7 +36,10 @@ import javafx.scene.layout.VBox;
  * User can submit their own URL for analysis OR choose the default "The Raven"
  * Results are output into a dynamic table to view
  */
-
+/** Main method
+ * @author Jack Oporto
+ * @author oportojack@gmail.com
+*/
 
 public class Main extends Application{
 	
@@ -44,8 +48,8 @@ public class Main extends Application{
 		@SuppressWarnings("unchecked")
 		public void start(Stage primaryStage) throws Exception{
 			
-			String abc123;
-			abc123 = scrapeData("csdcsdn");
+			//String abc123;
+			//abc123 = scrapeData("csdcsdn");
 			
 			//Scene and VBox to put everything inside of
 			VBox root = new VBox();
@@ -127,6 +131,11 @@ public class Main extends Application{
 			primaryStage.show();
 		}
 	
+		/** The main data gathering/sorting method
+		 * @param myWords is the object of words from the url passed in
+		 * @param myURL is the url passed in either from the user or the Raven default
+		 * @return Returns the sorted map of words after it's been processed by the other methods
+		*/
 	public static Map<String, Integer> getAllData(Data myWords, String myURL) throws InterruptedException, IOException {
 		
 		//If "Default: The Raven" is selected, myURL is null and set to The Raven here
@@ -149,7 +158,10 @@ public class Main extends Application{
 	}
 		
 	
-	
+	/** Scrapes the given url for poem text
+	 * @param myURL is the url passed in from the user or the Raven default
+	 * @return Returns the raw poem
+	*/
 	//GETS DATA FROM WEBSITE
 	public static String scrapeData(String myURL) throws IOException, InterruptedException {
 		Document doc = Jsoup.connect(myURL).get();
@@ -164,6 +176,10 @@ public class Main extends Application{
 		
 	}
 	
+	/** Counts the amount of times each word appears in the given array
+	 * @param strings is the array of words passed in to count
+	 * @return Returns the map of data containing the frequency of each word
+	*/
 	//WORD FREQUENCY COUNTER
 	public static HashMap<String, Integer> wordCount(String[] strings) {
 		  HashMap<String, Integer> map = new HashMap<String, Integer> ();
@@ -181,7 +197,10 @@ public class Main extends Application{
 		  return map;
 		}
 	
-	
+	/** Sorts the list of words/frequencies from most to least frequent
+	 * @param hm is the HashMap passed in with the key and values of each word.
+	 * @return Returns the map of data containing the sorted hashmap
+	*/
 	//WORD SORTER
 	public static HashMap<String, Integer> sortByValue(HashMap<String, Integer> hm) 
     { 
@@ -206,6 +225,10 @@ public class Main extends Application{
         return temp; 
     } 
 	
+	/** Creates an ObservableList object to pass our data into so the table can read it
+	 * @param sortedMap is the final sorted map containing the key and values of the sorted words.
+	 * @return Returns the data as tabledata for the table to use
+	*/
 	//GETS ALL DATA FOR THE TABLE
 	public ObservableList<Data> getTableData(Map<String, Integer> sortedMap){
 		int count = 0;
