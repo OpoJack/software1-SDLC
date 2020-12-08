@@ -30,19 +30,22 @@ import java.sql.SQLException;
 /* Name: Jack Oporto
  * Class: CEN 3024C
  * Professor Dhrgam Al Kafaf
- * Assignment: Module 2, SDLC
- * Date completed: September 19, 2020
+ * Assignment: Word Occurrences
  * 
  * Summary:
- * This program utilizes jsoup to extract a poem from a URL and relay the 20 most used words
+ * This was a project completed for Software Dev 1 during Fall 2020
+ * 
+ * This program utilizes jsoup to extract a poem from a URL and relays the 20 most used words
  * along with their frequency
  * 
- * Functionality extended Oct 16, 2020
- * JavaFX UI implemented
  * User can submit their own URL for analysis OR choose the default "The Raven"
+ * User input works best with text from https://www.gutenberg.org/
+ * 
  * Results are output into a dynamic table to view
+ * 
+ * Database functionality is commented out.
  */
-/** Main method
+/** Main Class
  * @author Jack Oporto
  * @author oportojack@gmail.com
 */
@@ -54,7 +57,7 @@ public class Main extends Application{
 		@SuppressWarnings("unchecked")
 		public void start(Stage primaryStage) throws Exception{
 			
-			Connection myConnection = getConnection();
+			//Connection myConnection = getConnection();
 			
 			//Scene and VBox to put everything inside of
 			VBox root = new VBox();
@@ -92,12 +95,14 @@ public class Main extends Application{
 			Button theRaven = new Button("Default: The Raven");
 			TextField text= new TextField();
 			
+			
+			
 			//User submission selection
 			submitURL.setOnAction(e -> 
 			{   
 				//Most of the data is retrieved here
 				try {
-					table.setItems(getTableData(getAllData(myWords, text.getText(), myConnection), myConnection));
+					table.setItems(getTableData(getAllData(myWords, text.getText())));
 					primaryStage.setScene(scene2);
 					
 				} catch (InterruptedException | IOException e1) {
@@ -111,12 +116,14 @@ public class Main extends Application{
 			        }
 			);
 			
+			
+			
 			//Default "The Raven" selection
 			theRaven.setOnAction(e -> 
 			{   
 				//Most of the data is retrieved here
 				try {
-					table.setItems(getTableData(getAllData(myWords, null, myConnection), myConnection));
+					table.setItems(getTableData(getAllData(myWords, null)));
 					primaryStage.setScene(scene2);
 					
 				} catch (InterruptedException | IOException e1) {
@@ -150,21 +157,21 @@ public class Main extends Application{
 		 * @param password is the password for your selected username
 		 * @return Returns the Connection object
 		*/
-		public static Connection getConnection() throws Exception{
-			try {
-				String driver = "com.mysql.cj.jdbc.Driver";
-				String url = "jdbc:mysql://localhost:3306/wordOccurrences";
-				String username = "root";
-				String password = "";
-				Class.forName(driver);
-				
-				Connection conn = DriverManager.getConnection(url, username, password);
-				System.out.println("Connection successful");
-				return conn;
-			}catch(Exception e) {System.out.println(e);}
-			
-			return null;
-		}
+//		public static Connection getConnection() throws Exception{
+//			try {
+//				String driver = "com.mysql.cj.jdbc.Driver";
+//				String url = "jdbc:mysql://localhost:3306/wordOccurrences";
+//				String username = "root";
+//				String password = "";
+//				Class.forName(driver);
+//				
+//				Connection conn = DriverManager.getConnection(url, username, password);
+//				System.out.println("Connection successful");
+//				return conn;
+//			}catch(Exception e) {System.out.println(e);}
+//			
+//			return null;
+//		}
 		
 		
 	
@@ -173,7 +180,7 @@ public class Main extends Application{
 		 * @param myURL is the url passed in either from the user or the Raven default
 		 * @return Returns the sorted map of words after it's been processed by the other methods
 		*/
-	public static Map<String, Integer> getAllData(Data myWords, String myURL, Connection thisConnection) throws InterruptedException, IOException {
+	public static Map<String, Integer> getAllData(Data myWords, String myURL) throws InterruptedException, IOException {
 		
 		//If "Default: The Raven" is selected, myURL is null and set to The Raven here
 		if(myURL == null) {
@@ -188,7 +195,7 @@ public class Main extends Application{
 		poemHash = wordCount(webData);
 		
 		//sortedMap gets all the sorted values of poemHash
-		Map<String, Integer> sortedMap = sortByValue(poemHash, thisConnection);
+		Map<String, Integer> sortedMap = sortByValue(poemHash);
 		
 		//System.out.println(sortedMap);
 		 return sortedMap;
@@ -239,7 +246,7 @@ public class Main extends Application{
 	 * @return Returns the map of data containing the sorted hashmap
 	*/
 	//WORD SORTER
-	public static HashMap<String, Integer> sortByValue(HashMap<String, Integer> hm, Connection thisConnection){ 
+	public static HashMap<String, Integer> sortByValue(HashMap<String, Integer> hm){ 
 		//Count variable exists so database is only written into 20 times
 		int count = 0;
 		
@@ -260,24 +267,26 @@ public class Main extends Application{
         HashMap<String, Integer> temp = new LinkedHashMap<String, Integer>(); 
         for (Map.Entry<String, Integer> aa : list) { 
             temp.put(aa.getKey(), aa.getValue()); 
-            if(count <20) {
-	            try {
-	            	PreparedStatement posted = thisConnection.prepareStatement(
-	            			//Kept getting syntax errors for this, it should check to see if the word exists in the table
-	            			//and not insert a new entry if it exists.
+//            if(count <20) {
+//	            try {
+//	            	PreparedStatement posted = thisConnection.prepareStatement(
+//	            			//Kept getting syntax errors for this, it should check to see if the word exists in the table
+//	            			//and not insert a new entry if it exists.
 //	            			"INSERT INTO word (word, frequency)" + 
 //	            			"SELECT * FROM (SELECT '"+aa.getKey()+"', '"+aa.getValue()+"') AS tmp" + 
 //	            			"WHERE NOT EXISTS (" + 
 //	            			"    SELECT name FROM word WHERE word = '"+aa.getKey()+"'" + 
 //	            			") LIMIT 1");
-	            			"INSERT INTO word (word, frequency) VALUES('"+aa.getKey()+"', '"+aa.getValue()+"')");
-	            	posted.executeUpdate();
-	            }catch(Exception e) {System.out.println(e); 
-            }
-            }count++;//Count variable exists so database is only written into 20 times
+//	            			"INSERT INTO word (word, frequency) VALUES('"+aa.getKey()+"', '"+aa.getValue()+"')");
+//	            	posted.executeUpdate();
+//	            }catch(Exception e) {System.out.println(e); 
+//            }
+//            }count++;//Count variable exists so database is only written into 20 times
         }
         return temp; 
     } 
+	
+	
 	
 	/** Creates an ObservableList object to pass our data into so the table can read it
 	 * @param sortedMap is the final sorted map containing the key and values of the sorted words.
@@ -285,32 +294,32 @@ public class Main extends Application{
 	 * @throws SQLException 
 	*/
 	//GETS ALL DATA FOR THE TABLE
-	public ObservableList<Data> getTableData(Map<String, Integer> sortedMap, Connection thisConnection) throws SQLException{
-		//int count = 0;
+	public ObservableList<Data> getTableData(Map<String, Integer> sortedMap) throws SQLException{
+		int count = 0;
 		ObservableList<Data> tableData = FXCollections.observableArrayList();
 		
-		PreparedStatement statement = thisConnection.prepareStatement("SELECT * FROM word");
+		//PreparedStatement statement = thisConnection.prepareStatement("SELECT * FROM word");
 		
-		ResultSet result = statement.executeQuery();
-			while(result.next()) {
-			tableData.add(new Data(result.getInt("word_id"), result.getString("word"), result.getInt("frequency")));
-			}
+//		ResultSet result = statement.executeQuery();
+//			while(result.next()) {
+//			tableData.add(new Data(result.getInt("word_id"), result.getString("word"), result.getInt("frequency")));
+//			}
 		
 		
 		
 		//This iterates through the sorted map and prints out the key and values
-//		 for (Map.Entry<String, Integer> en : sortedMap.entrySet()) { 
-//			 tableData.add(new Data(count, en.getKey(), en.getValue()));
-//			 
-//	            count++;
-//	            if(count == 20) {
-//	            	break;  //Probably poor form but I didn't figure another way to iterate through the map
-//	            			//without going through the entire map.
-//	            }
-//	        }
-
-		return tableData;
+		 for (Map.Entry<String, Integer> en : sortedMap.entrySet()) { 
+			 tableData.add(new Data(count, en.getKey(), en.getValue()));
+			 
+	            count++;
+	            if(count == 20) {
+	            	break;  //Probably poor form but I didn't figure another way to iterate through the map
+	            			//without going through the entire map.
+	            }
+	        }
+		 return tableData;
 	}
+		
 	
 	public static void main(String[] args) throws Exception {
 		launch(args);
